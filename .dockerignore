@@ -6,3 +6,5 @@ venv/
 .git/
 restored/*
 !restored/.gitkeep
+replica/*
+!replica/.gitkeep

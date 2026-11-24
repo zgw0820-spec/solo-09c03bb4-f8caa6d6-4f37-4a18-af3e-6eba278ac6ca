@@ -11,11 +11,14 @@ services:
     environment:
       RESTORE_ARCHIVE_DIR: /backups
       RESTORE_OUTPUT_DIR: /restored
+      RESTORE_REPLICA_DIR: /replica
       RESTORE_MAX_CONCURRENT: "2"
     volumes:
       # Backups are mounted read-only: the service never writes to them.
       - ./backups:/backups:ro
       - ./restored:/restored
+      # Drill copies live here; the repair API rewrites them in place.
+      - ./replica:/replica
     read_only: true
     tmpfs:
       - /tmp

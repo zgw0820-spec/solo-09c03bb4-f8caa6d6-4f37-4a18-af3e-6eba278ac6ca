@@ -3,7 +3,8 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     RESTORE_ARCHIVE_DIR=/backups \
-    RESTORE_OUTPUT_DIR=/restored
+    RESTORE_OUTPUT_DIR=/restored \
+    RESTORE_REPLICA_DIR=/replica
 
 WORKDIR /srv
 
@@ -14,8 +15,8 @@ COPY app ./app
 COPY tools ./tools
 
 RUN useradd --system --uid 10001 --home-dir /srv restore \
-    && mkdir -p /backups /restored \
-    && chown -R restore:restore /srv /restored
+    && mkdir -p /backups /restored /replica \
+    && chown -R restore:restore /srv /restored /replica
 
 USER restore
 

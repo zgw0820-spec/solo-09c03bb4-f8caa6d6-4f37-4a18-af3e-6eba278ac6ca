@@ -6,3 +6,5 @@ venv/
 *.egg-info/
 restored/*
 !restored/.gitkeep
+replica/*
+!replica/.gitkeep

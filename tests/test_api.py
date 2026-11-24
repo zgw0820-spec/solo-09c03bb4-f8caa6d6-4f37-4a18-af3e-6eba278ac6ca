@@ -14,9 +14,12 @@ def client(tmp_path, monkeypatch):
 
     archives = tmp_path / "backups"
     restored = tmp_path / "restored"
+    replica = tmp_path / "replica"
     archives.mkdir()
+    replica.mkdir()
     monkeypatch.setattr(main, "ARCHIVE_DIR", str(archives))
     monkeypatch.setattr(main, "OUTPUT_DIR", str(restored))
+    monkeypatch.setattr(main, "REPLICA_DIR", str(replica))
     # Re-create the app-independent state used by lifespan.
     with TestClient(main.app) as c:
         yield c, archives, restored

@@ -5,6 +5,8 @@ Layout (deliberately exercises every hard-link case the service supports):
     data/2024/inside.txt              regular file, inside the selection
     data/2024/report.bin              regular file, inside the selection
     data/2024/nested/deep.txt         regular file two levels down
+    data/2024/dup_a.txt               regular file, same bytes as dup_b.txt but NOT linked
+    data/2024/nested/dup_b.txt        regular file, same bytes as dup_a.txt but NOT linked
     data/2024/shared_link             hard link -> ../shared/blob.bin   (outside, appears earlier)
     data/2024/forward_link            hard link -> ../shared/forward.bin (outside, appears LATER)
     data/2024/chained_link            hard link -> chained_mid
@@ -70,6 +72,11 @@ def build(path: str) -> None:
         _add_file(tar, "data/2024/inside.txt", b"inside the selected directory\n")
         _add_file(tar, "data/2024/report.bin", report)
         _add_file(tar, "data/2024/nested/deep.txt", b"deep file\n")
+        # Two independent files with identical bytes but no hard link between
+        # them: a content-based dedup pass on the drill copy would wrongly
+        # join them into one inode, and the repair must split them apart.
+        _add_file(tar, "data/2024/dup_a.txt", b"same bytes, two independent files\n")
+        _add_file(tar, "data/2024/nested/dup_b.txt", b"same bytes, two independent files\n")
 
         _add_link(tar, "data/2024/shared_link", "shared/blob.bin")
         _add_link(tar, "data/2024/chained_mid", "shared/blob.bin")
